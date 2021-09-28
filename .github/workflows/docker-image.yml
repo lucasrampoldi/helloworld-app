@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: develop
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag lucasrampoldi/helloworld-app:1.0
+
+    - name: Push the Docker image
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secret.DOCKER_USERNAME }}
+        password: ${{ secret.DOCKER_TOKEN }}
+        repository: lucasrampoldi/helloworld-app
+        tags: 1.0
+        
+    
